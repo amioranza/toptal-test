@@ -1,13 +1,13 @@
 variable "aws_azs" {
-  default = []
+  default = null
 }
 
 variable "aws_private_subnets" {
-  default = []
+  default = null
 }
 
 variable "aws_public_subnets" {
-  default = []
+  default = null
 }
 
 variable "aws_region" {

@@ -4,7 +4,7 @@ terraform {
     bucket               = "tt-take-home-test-terraform-state"
     key                  = "terraform.tfstate"
     dynamodb_table       = "tt-take-home-test-terraform-state-lock"
-    workspace_key_prefix = "application"
+    workspace_key_prefix = "infra-live"
     encrypt              = true
   }
   required_providers {

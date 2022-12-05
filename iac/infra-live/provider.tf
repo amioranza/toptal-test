@@ -4,8 +4,7 @@ provider "aws" {
     tags = {
       ManagedBy = "Terraform"
       Env       = terraform.workspace
-      Repo      = path.root
+      Layer     = basename(path.cwd)
     }
   }
-
 }

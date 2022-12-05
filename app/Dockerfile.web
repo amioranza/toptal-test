@@ -3,6 +3,8 @@ FROM --platform=linux/amd64 node:lts-slim
 ARG PORT
 ARG API_HOST
 
+WORKDIR /app
+
 COPY ./web/ .
 
 RUN npm install
