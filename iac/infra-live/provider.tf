@@ -6,6 +6,7 @@ provider "aws" {
       Changed   = timestamp()
       Env       = terraform.workspace
       Layer     = basename(path.cwd)
+      Dummy     = "1"
     }
   }
 }
