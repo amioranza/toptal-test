@@ -14,6 +14,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
       - name: api folder changed
         id: api-changed
         uses: tj-actions/changed-files@v34
@@ -21,11 +28,16 @@ jobs:
           files: |
             app/api/**
 
-      - name: build api if changed
+      - name: api build
         if: steps.api-changed.outputs.any_changed == 'true'
+        working-directory: ./app
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: api
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          echo "One or more files in the docs folder has changed."
-          echo "List all the files that have changed: ${{ steps.api-changed.outputs.all_changed_files }}"
+          docker build -f Dockerfile.api -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
       - name: web folder changed
         id: web-changed
@@ -34,8 +46,13 @@ jobs:
           files: |
             app/web/**
 
-      - name: build web if changed
+      - name: web build
         if: steps.web-changed.outputs.any_changed == 'true'
+        working-directory: ./app
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: web
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          echo "One or more files in the docs folder has changed."
-          echo "List all the files that have changed: ${{ steps.web-changed.outputs.all_changed_files }}"
+          docker build -f Dockerfile.web -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
