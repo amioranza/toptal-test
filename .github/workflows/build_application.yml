@@ -1,0 +1,43 @@
+name: build_application
+
+on:
+  # Compare the preceeding commit of main -> to the current commit of the main branch.
+  # (Note: To compare changes between the last pushed commit to the remote main branch set `since_last_remote_commit: true`)
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # windows-latest | macos-latest
+    name: Test changed-files
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: api folder changed
+        id: api-changed
+        uses: tj-actions/changed-files@v34
+        with:
+          files: |
+            app/api/**
+
+      - name: build api if changed
+        if: steps.api-changed.outputs.any_changed == 'true'
+        run: |
+          echo "One or more files in the docs folder has changed."
+          echo "List all the files that have changed: ${{ steps.api-changed.outputs.all_changed_files }}"
+
+      - name: web folder changed
+        id: web-changed
+        uses: tj-actions/changed-files@v34
+        with:
+          files: |
+            app/web/**
+
+      - name: build web if changed
+        if: steps.web-changed.outputs.any_changed == 'true'
+        run: |
+          echo "One or more files in the docs folder has changed."
+          echo "List all the files that have changed: ${{ steps.web-changed.outputs.all_changed_files }}"
