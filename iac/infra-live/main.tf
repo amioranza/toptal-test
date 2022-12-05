@@ -11,9 +11,6 @@ resource "aws_ecs_service" "api" {
   # iam_role             = aws_iam_role.task_execution_role.arn
   # depends_on           = [aws_iam_role.task_execution_role]
   force_new_deployment = true
-  triggers = {
-    redeployment = timestamp()
-  }
 }
 
 resource "aws_ecs_task_definition" "api" {
