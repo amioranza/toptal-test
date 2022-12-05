@@ -34,4 +34,13 @@ module "web" {
     hostPort      = 8080
     protocol      = "TCP"
   }]
+  log_configuration = {
+    logDriver = "awslogs"
+    options = {
+      "awslogs-group"         = aws_cloudwatch_log_group.logs["web"].name
+      "awslogs-region"        = local.env
+      "awslogs-create-group"  = "true",
+      "awslogs-stream-prefix" = "web"
+    }
+  }
 }
