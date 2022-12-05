@@ -5,7 +5,7 @@ resource "aws_ecs_service" "api" {
   desired_count   = 1
   launch_type     = "FARGATE"
   network_configuration {
-    subnets          = data.aws_subnet_ids.private.ids
+    subnets          = data.aws_subnets.private.ids
     assign_public_ip = false
   }
   # iam_role             = aws_iam_role.task_execution_role.arn

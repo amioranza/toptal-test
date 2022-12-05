@@ -28,8 +28,10 @@ data "aws_vpc" "application_vpc" {
 }
 
 data "aws_subnets" "private" {
-  vpc_id = data.aws_vpc.application_vpc.id
-
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.application_vpc.id]
+  }
   tags = {
     Name = "application-vpc-development-private-*"
   }
