@@ -10,7 +10,8 @@ resource "aws_ssm_parameter" "ssm-parameters" {
       value
     ]
   }
-  name  = each.value
-  type  = "SecureString"
-  value = "changeme"
+  name      = each.value
+  type      = "SecureString"
+  value     = "changeme"
+  overwrite = true
 }
