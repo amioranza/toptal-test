@@ -10,7 +10,7 @@ on:
 jobs:
   validate_and_plan:
     runs-on: ubuntu-latest  # windows-latest | macos-latest
-    name: plan infra
+    name: Apply Infra Changes
     steps:
       - uses: actions/checkout@v3
         with:
