@@ -7,21 +7,32 @@ on:
     branches:
       - main
 
+defaults:
+  run:
+    working-directory: ./iac/base
+
 jobs:
   validate_and_plan:
     runs-on: ubuntu-latest  # windows-latest | macos-latest
-    name: Apply Infra Changes
+    name: Apply Base Infra Changes
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
       - name: infra-live folder changed
         id: infra-changed
         uses: tj-actions/changed-files@v34
         with:
           files: |
-            iac/infra-live/**
+            iac/base/**
 
       - uses: hashicorp/setup-terraform@v2
         with:
@@ -32,50 +43,33 @@ jobs:
         id: fmt
         run: terraform fmt -check
         continue-on-error: false
-        working-directory: ./iac/infra-live
 
       - name: Terraform Init
         if: steps.infra-changed.outputs.any_changed == 'true'
         id: init
         run: terraform init
-        working-directory: ./iac/infra-live
         env:
           TF_WORKSPACE: development
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Terraform Validate
         if: steps.infra-changed.outputs.any_changed == 'true'
         id: validate
         run: terraform validate -no-color
-        working-directory: ./iac/infra-live
         env:
           TF_WORKSPACE: development
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Terraform Plan
         if: steps.infra-changed.outputs.any_changed == 'true'
         id: plan
         run: terraform plan -no-color
-        working-directory: ./iac/infra-live
         env:
           TF_WORKSPACE: development
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         continue-on-error: false
 
       - name: Terraform Apply
         if: steps.infra-changed.outputs.any_changed == 'true'
         id: apply
         run: terraform apply -auto-approve -input=false -no-color
-        working-directory: ./iac/infra-live
         env:
           TF_WORKSPACE: development
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         continue-on-error: false
