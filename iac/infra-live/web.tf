@@ -17,7 +17,7 @@ resource "aws_ecs_task_definition" "web" {
   network_mode             = "awsvpc"
   cpu                      = 256
   memory                   = 512
-  container_definitions    = module.api.json_map_encoded_list
+  container_definitions    = module.web.json_map_encoded_list
 }
 
 module "web" {
@@ -25,7 +25,7 @@ module "web" {
   version = "0.58.1"
 
   container_name   = "web"
-  container_image  = "${data.aws_ecr_repository.api.repository_url}:"
+  container_image  = "${data.aws_ecr_repository.web.repository_url}:${data.aws_ssm_parameter.web_docker_tag.value}"
   container_memory = 128
   port_mappings = [{
     containerPort = 8080

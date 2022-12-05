@@ -37,10 +37,10 @@ data "aws_subnets" "private" {
   }
 }
 
-data "aws_ssm_paramter" "api_docker_tag" {
+data "aws_ssm_parameter" "api_docker_tag" {
   name = "/application/api/${local.env}/docker_tag"
 }
 
-data "aws_ssm_paramter" "web_docker_tag" {
+data "aws_ssm_parameter" "web_docker_tag" {
   name = "/application/web/${local.env}/docker_tag"
 }

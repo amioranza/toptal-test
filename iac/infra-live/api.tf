@@ -27,7 +27,7 @@ module "api" {
   version = "0.58.1"
 
   container_name   = "api"
-  container_image  = "${data.aws_ecr_repository.api.repository_url}:"
+  container_image  = "${data.aws_ecr_repository.api.repository_url}:${data.aws_ssm_parameter.api_docker_tag.value}"
   container_memory = 128
   port_mappings = [{
     containerPort = 8080
