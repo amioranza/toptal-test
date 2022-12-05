@@ -27,7 +27,7 @@ data "aws_vpc" "application_vpc" {
   }
 }
 
-data "aws_subnet_ids" "private" {
+data "aws_subnets" "private" {
   vpc_id = data.aws_vpc.application_vpc.id
 
   tags = {
