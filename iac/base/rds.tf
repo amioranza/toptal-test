@@ -6,8 +6,8 @@ module "rds_instance" {
   name                         = "app"
   ca_cert_identifier           = "rds-ca-2019"
   allowed_cidr_blocks          = [module.vpc.vpc_cidr_block]
-  database_name                = "database"
-  database_user                = "admin"
+  database_name                = "appdb"
+  database_user                = "appuser"
   database_password            = aws_ssm_parameter.ssm-parameters["database_password"].value
   database_port                = 5432
   multi_az                     = false
@@ -16,10 +16,9 @@ module "rds_instance" {
   storage_encrypted            = false
   engine                       = "postgres"
   engine_version               = "13.7"
-  major_engine_version         = "13.7"
+  major_engine_version         = "13"
+  db_parameter_group           = "postgres13"
   instance_class               = "db.t3.micro"
-  db_parameter_group           = "default.postgres13"
-  option_group_name            = "postgres-options"
   publicly_accessible          = false
   subnet_ids                   = module.vpc.private_subnets
   vpc_id                       = module.vpc.vpc_id

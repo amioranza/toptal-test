@@ -1,6 +1,7 @@
 locals {
-  env = terraform.workspace
-  azs = ["${local.aws_region}a", "${local.aws_region}b", "${local.aws_region}c"]
+  env         = terraform.workspace
+  app_modules = ["api", "web"]
+  azs         = ["${local.aws_region}a", "${local.aws_region}b", "${local.aws_region}c"]
   cidr = {
     development = "10.2.0.0/16"
     production  = "10.1.0.0/16"

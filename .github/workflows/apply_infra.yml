@@ -21,7 +21,14 @@ jobs:
         with:
           files: |
             iac/infra-live/**
-      - name: apply infra
+      - name: 'Terraform Init'
         if: steps.infra-changed.outputs.any_changed == 'true'
-        run: |
-          echo "Building infra"
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: 0.8.0
+          tf_actions_subcommand: 'init'
+          tf_actions_working_dir: './iac/infra-live'
+          tf_actions_comment: true
+        env:
+          TF_WORKSPACE: dev
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
