@@ -14,7 +14,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: app folder changed
+        id: app-changed
+        uses: tj-actions/changed-files@v34
+        with:
+          files: |
+            app/**
+
       - name: update infra
-        # if: steps.api-changed.outputs.any_changed == 'true'
+        if: steps.app-changed.outputs.any_changed == 'true'
         run: |
           echo "Updating infra"
