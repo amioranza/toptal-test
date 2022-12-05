@@ -42,7 +42,7 @@ jobs:
         run: |
           docker build -f Dockerfile.api -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
-          aws ssm put-parameter --name "/application/api/development/api_docker_tag" --type "SecureString" --value ${{ github.sha }} --overwrite
+          aws ssm put-parameter --name "/application/api/development/docker_tag" --type "SecureString" --value ${{ github.sha }} --overwrite
 
       - name: web folder changed
         id: web-changed
@@ -61,4 +61,4 @@ jobs:
         run: |
           docker build -f Dockerfile.web -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
-          aws ssm put-parameter --name "/application/api/development/web_docker_tag" --type "SecureString" --value ${{ github.sha }} --overwrite
+          aws ssm put-parameter --name "/application/web/development/docker_tag" --type "SecureString" --value ${{ github.sha }} --overwrite
