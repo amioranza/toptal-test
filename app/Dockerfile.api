@@ -1,0 +1,15 @@
+FROM --platform=linux/amd64 node:lts-slim
+
+ARG PORT
+ARG DB
+ARG DBUSER 
+ARG DBPASS
+ARG DBHOST
+ARG DBPORT
+
+WORKDIR /app
+
+COPY ./api/ .
+
+RUN npm install
+CMD npm start
