@@ -44,3 +44,11 @@ data "aws_ssm_parameter" "api_docker_tag" {
 data "aws_ssm_parameter" "web_docker_tag" {
   name = "/application/web/${local.env}/docker_tag"
 }
+
+data "aws_ssm_parameter" "database_password" {
+  name = "/application/global/${local.env}/database_password"
+}
+
+data "aws_db_instance" "database" {
+  db_instance_identifier = "tt-${local.env}-app"
+}

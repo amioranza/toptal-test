@@ -45,4 +45,14 @@ module "api" {
       "awslogs-stream-prefix" = "api"
     }
   }
+  map_environment = {
+    "PORT"   = "3000"
+    "DB"     = data.aws_db_instance.database.db_name
+    "DBUSER" = data.aws_db_instance.database.master_username
+    "DBHOST" = data.aws_db_instance.database.address
+    "DBPORT" = data.aws_db_instance.database.port
+  }
+  map_secrets = {
+    DBPASS = data.aws_ssm_parameter.database_password.arn
+  }
 }

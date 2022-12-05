@@ -43,4 +43,8 @@ module "web" {
       "awslogs-stream-prefix" = "web"
     }
   }
+  map_environment = {
+    "PORT"     = "3000"
+    "API_HOST" = "http://localhost"
+  }
 }
