@@ -8,9 +8,9 @@ on:
       - main
 
 jobs:
-  build:
+  validate_and_plan:
     runs-on: ubuntu-latest  # windows-latest | macos-latest
-    name: apply infra
+    name: plan infra
     steps:
       - uses: actions/checkout@v3
         with:
@@ -30,6 +30,7 @@ jobs:
         id: fmt
         run: terraform fmt -check
         continue-on-error: false
+        working-directory: ./iac/infra-live
 
       - name: Terraform Init
         if: steps.infra-changed.outputs.any_changed == 'true'
@@ -57,6 +58,24 @@ jobs:
         if: steps.infra-changed.outputs.any_changed == 'true'
         id: plan
         run: terraform plan -no-color
+        working-directory: ./iac/infra-live
+        env:
+          TF_WORKSPACE: development
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        continue-on-error: false
+
+  apply:
+    runs-on: ubuntu-latest  # windows-latest | macos-latest
+    name: apply infra
+    needs:
+      - validate_and_plan
+    steps:
+      - name: Terraform Apply
+        if: steps.infra-changed.outputs.any_changed == 'true'
+        id: apply
+        run: terraform apply -auto-approve -input=false -no-color
         working-directory: ./iac/infra-live
         env:
           TF_WORKSPACE: development
