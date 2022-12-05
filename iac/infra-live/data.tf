@@ -36,3 +36,11 @@ data "aws_subnets" "private" {
     Name = "application-vpc-development-private-*"
   }
 }
+
+data "aws_ssm_paramter" "api_docker_tag" {
+  name = "/application/api/${local.env}/docker_tag"
+}
+
+data "aws_ssm_paramter" "web_docker_tag" {
+  name = "/application/web/${local.env}/docker_tag"
+}
