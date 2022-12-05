@@ -37,6 +37,16 @@ data "aws_subnets" "private" {
   }
 }
 
+data "aws_subnets" "public" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.application_vpc.id]
+  }
+  tags = {
+    Name = "application-vpc-development-public-*"
+  }
+}
+
 data "aws_ssm_parameter" "api_docker_tag" {
   name = "/application/api/${local.env}/docker_tag"
 }

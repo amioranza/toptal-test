@@ -32,8 +32,8 @@ module "api" {
   container_image  = "${data.aws_ecr_repository.api.repository_url}:${data.aws_ssm_parameter.api_docker_tag.value}"
   container_memory = 128
   port_mappings = [{
-    containerPort = 8080
-    hostPort      = 8080
+    containerPort = 3000
+    hostPort      = 3000
     protocol      = "TCP"
   }]
   log_configuration = {
