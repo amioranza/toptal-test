@@ -65,13 +65,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         continue-on-error: false
-
-  apply:
-    runs-on: ubuntu-latest  # windows-latest | macos-latest
-    name: apply infra
-    needs:
-      - validate_and_plan
-    steps:
       - name: Terraform Apply
         if: steps.infra-changed.outputs.any_changed == 'true'
         id: apply
