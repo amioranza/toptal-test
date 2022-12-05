@@ -3,6 +3,7 @@ provider "aws" {
   default_tags {
     tags = {
       ManagedBy = "Terraform"
+      Changed   = timestamp()
       Env       = terraform.workspace
       Layer     = basename(path.cwd)
     }
