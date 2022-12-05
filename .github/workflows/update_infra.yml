@@ -1,9 +1,9 @@
-name: CI notify
+name: Update Infra
 
 # Only trigger, when the build workflow succeeded
 on:
   workflow_run:
-    workflows: ["build_application"]
+    workflows: ["Build Application"]
     types:
       - completed
 

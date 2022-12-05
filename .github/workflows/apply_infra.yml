@@ -1,4 +1,4 @@
-name: apply_infra
+name: Apply Infra
 
 on:
   # Compare the preceeding commit of main -> to the current commit of the main branch.
