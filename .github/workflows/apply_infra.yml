@@ -1,0 +1,27 @@
+name: apply_infra
+
+on:
+  # Compare the preceeding commit of main -> to the current commit of the main branch.
+  # (Note: To compare changes between the last pushed commit to the remote main branch set `since_last_remote_commit: true`)
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # windows-latest | macos-latest
+    name: apply infra
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: infra-live folder changed
+        id: infra-changed
+        uses: tj-actions/changed-files@v34
+        with:
+          files: |
+            iac/infra-live/**
+      - name: apply infra
+        if: steps.infra-changed.outputs.any_changed == 'true'
+        run: |
+          echo "Building infra"

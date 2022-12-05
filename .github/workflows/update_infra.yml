@@ -1,0 +1,20 @@
+name: CI notify
+
+# Only trigger, when the build workflow succeeded
+on:
+  workflow_run:
+    workflows: ["build_application"]
+    types:
+      - completed
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: update infra
+        # if: steps.api-changed.outputs.any_changed == 'true'
+        run: |
+          echo "Updating infra"
