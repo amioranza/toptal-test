@@ -22,7 +22,7 @@ resource "aws_security_group" "api_security_group" {
   ingress {
     from_port = 3000
     to_port   = 3000
-    protocol  = "-1"
+    protocol  = "TCP"
     # Only allowing traffic in from the load balancer security group
     security_groups = ["${aws_security_group.load_balancer_security_group.id}"]
   }
