@@ -12,7 +12,6 @@ resource "aws_alb" "application_load_balancer" {
   }
 }
 
-# Creating a security group for the load balancer:
 resource "aws_security_group" "load_balancer_security_group" {
   vpc_id = data.aws_vpc.application_vpc.id
   ingress {

@@ -11,7 +11,7 @@ defaults:
 
 jobs:
   validate_and_plan:
-    runs-on: ubuntu-latest  # windows-latest | macos-latest
+    runs-on: ubuntu-latest
     name: Apply Base Infra Changes
     steps:
       - uses: actions/checkout@v3
