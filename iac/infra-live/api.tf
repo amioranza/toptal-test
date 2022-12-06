@@ -62,7 +62,7 @@ module "api" {
     logDriver = "awslogs"
     options = {
       "awslogs-group"         = aws_cloudwatch_log_group.logs["api"].name
-      "awslogs-region"        = local.env
+      "awslogs-region"        = local.aws_region
       "awslogs-stream-prefix" = "api"
     }
   }
@@ -72,7 +72,6 @@ module "api" {
     "DBUSER"      = data.aws_db_instance.database.master_username
     "DBHOST"      = data.aws_db_instance.database.address
     "DBPORT"      = data.aws_db_instance.database.port
-    "ECS_FARGATE" = true
   }
   map_secrets = {
     "DBPASS" = data.aws_ssm_parameter.database_password.arn

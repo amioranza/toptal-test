@@ -64,14 +64,13 @@ module "web" {
     logDriver = "awslogs"
     options = {
       "awslogs-group"         = aws_cloudwatch_log_group.logs["web"].name
-      "awslogs-region"        = local.env
+      "awslogs-region"        = local.aws_region
       "awslogs-stream-prefix" = "web"
     }
   }
   map_environment = {
-    "PORT"        = "3000"
-    "API_HOST"    = "http://${aws_alb.application_load_balancer.dns_name}"
-    "ECS_FARGATE" = true
+    "PORT"     = "3000"
+    "API_HOST" = "http://${aws_alb.application_load_balancer.dns_name}"
   }
 }
 
