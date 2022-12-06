@@ -1,9 +1,8 @@
-name: Release Infra
+name: Release Base Infra
 
 on:
-  push:
-    branches:
-      - 'releases/**'
+  release:
+    types: [created]
 
 defaults:
   run:

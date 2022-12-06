@@ -1,4 +1,4 @@
-name: Release App and Infra
+name: Release App and Infra Live
 
 on:
   workflow_run:
