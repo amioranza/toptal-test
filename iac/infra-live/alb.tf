@@ -24,6 +24,7 @@ resource "aws_s3_bucket_acl" "example" {
 
 # Creating a security group for the load balancer:
 resource "aws_security_group" "load_balancer_security_group" {
+  vpc_id = data.aws_vpc.application_vpc.id
   ingress {
     from_port   = 3000
     to_port     = 3000
