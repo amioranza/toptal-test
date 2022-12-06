@@ -5,7 +5,6 @@ provider "aws" {
       ManagedBy = "Terraform"
       Env       = terraform.workspace
       Layer     = basename(path.cwd)
-      Dummy     = "2"
     }
   }
 }
