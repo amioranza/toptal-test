@@ -11,6 +11,17 @@
 #   force_new_deployment = true
 # }
 
+# resource "aws_ecs_task_definition" "web" {
+#   family                   = "web"
+#   requires_compatibilities = ["FARGATE"]
+#   network_mode             = "awsvpc"
+#   cpu                      = 256
+#   memory                   = 512
+#   container_definitions    = module.web.json_map_encoded_list
+#   execution_role_arn       = aws_iam_role.task_execution_role.arn
+#   task_role_arn            = aws_iam_role.task_execution_role.arn
+# }
+
 module "ecs_alb_service_task" {
   source                    = "cloudposse/ecs-alb-service-task/aws"
   version                   = "0.66.4"
@@ -31,17 +42,6 @@ module "ecs_alb_service_task" {
   task_role_arn             = aws_iam_role.task_execution_role.arn
   task_exec_role_arn        = aws_iam_role.task_execution_role.arn
 }
-
-# resource "aws_ecs_task_definition" "web" {
-#   family                   = "web"
-#   requires_compatibilities = ["FARGATE"]
-#   network_mode             = "awsvpc"
-#   cpu                      = 256
-#   memory                   = 512
-#   container_definitions    = module.web.json_map_encoded_list
-#   execution_role_arn       = aws_iam_role.task_execution_role.arn
-#   task_role_arn            = aws_iam_role.task_execution_role.arn
-# }
 
 module "web" {
   source  = "cloudposse/ecs-container-definition/aws"
