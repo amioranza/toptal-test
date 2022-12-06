@@ -22,4 +22,3 @@
 - DBPORT: Database server listening port
 
 These variables need to be set
-...
