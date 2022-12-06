@@ -44,7 +44,9 @@ jobs:
       - name: npm ci api
         if: steps.api-changed.outputs.any_changed == 'true'
         working-directory: app/api/
-        run: npm ci
+        run: |
+          npm install
+          npm ci
 
       - name: npm build api
         if: steps.api-changed.outputs.any_changed == 'true'
