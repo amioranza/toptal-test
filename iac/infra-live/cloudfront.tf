@@ -12,7 +12,7 @@ resource "aws_cloudfront_distribution" "web" {
       "GET",
       "HEAD",
     ]
-    cache_policy_id = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+    cache_policy_id = aws_cloudfront_cache_policy.policy.id
     cached_methods = [
       "GET",
       "HEAD",
@@ -33,7 +33,7 @@ resource "aws_cloudfront_distribution" "web" {
       "GET",
       "HEAD",
     ]
-    cache_policy_id = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+    cache_policy_id = aws_cloudfront_cache_policy.policy.id
     cached_methods = [
       "GET",
       "HEAD",
@@ -78,5 +78,30 @@ resource "aws_cloudfront_distribution" "web" {
   viewer_certificate {
     cloudfront_default_certificate = true
     minimum_protocol_version       = "TLSv1"
+  }
+}
+
+resource "aws_cloudfront_cache_policy" "policy" {
+  comment     = "Default caching"
+  default_ttl = 86400
+  max_ttl     = 31536000
+  min_ttl     = 1
+  name        = "CachingOptimized"
+
+  parameters_in_cache_key_and_forwarded_to_origin {
+    enable_accept_encoding_brotli = true
+    enable_accept_encoding_gzip   = true
+
+    cookies_config {
+      cookie_behavior = "none"
+    }
+
+    headers_config {
+      header_behavior = "none"
+    }
+
+    query_strings_config {
+      query_string_behavior = "none"
+    }
   }
 }
