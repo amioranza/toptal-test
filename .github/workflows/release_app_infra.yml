@@ -25,7 +25,10 @@ jobs:
       - name: api image tag
         id: api-image-tag
         run: |
-          echo "::set-output name=API_IMAGE_TAG::$(aws ssm get-parameter --name '/application/api/development/docker_tag' --with-decryption --no-cli-pager | jq -r .Parameter.Value)"
+          echo 'API_IMAGE_TAG<<EOF' >> $GITHUB_ENV
+          aws ssm get-parameter --name "/application/api/development/docker_tag" --with-decryption --no-cli-pager | jq -r .Parameter.Value >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+          echo $API_IMAGE_TAG
 
       - name: tag image as release
         env:
@@ -40,7 +43,10 @@ jobs:
       - name: web image tag
         id: web-image-tag
         run: |
-          echo "::set-output name=WEB_IMAGE_TAG::$(aws ssm get-parameter --name '/application/web/development/docker_tag' --with-decryption --no-cli-pager | jq -r .Parameter.Value)"
+          echo 'WEB_IMAGE_TAG<<EOF' >> $GITHUB_ENV
+          aws ssm get-parameter --name "/application/web/development/docker_tag" --with-decryption --no-cli-pager | jq -r .Parameter.Value >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+          echo $WEB_IMAGE_TAG
 
       - name: tag image as release
         env:

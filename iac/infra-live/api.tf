@@ -36,7 +36,7 @@ resource "aws_security_group" "api_security_group" {
 }
 
 resource "aws_ecs_task_definition" "api" {
-  family                   = "api"
+  family                   = "api-${local.env}"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 256

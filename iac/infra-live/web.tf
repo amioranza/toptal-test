@@ -38,7 +38,7 @@ resource "aws_security_group" "web_security_group" {
 }
 
 resource "aws_ecs_task_definition" "web" {
-  family                   = "web"
+  family                   = "web-${local.env}"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 256
