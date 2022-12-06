@@ -4,13 +4,34 @@ resource "aws_ecs_service" "api" {
   task_definition = aws_ecs_task_definition.api.arn
   desired_count   = 1
   launch_type     = "FARGATE"
+  load_balancer {
+    target_group_arn = aws_lb_target_group.target_group.arn
+    container_name   = "api"
+    container_port   = 3000
+  }
   network_configuration {
     subnets          = data.aws_subnets.private.ids
     assign_public_ip = false
   }
-  # iam_role             = aws_iam_role.task_execution_role.arn
-  # depends_on           = [aws_iam_role.task_execution_role]
   force_new_deployment = true
+}
+
+resource "aws_security_group" "api_security_group" {
+  vpc_id = data.aws_vpc.application_vpc.id
+  ingress {
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    # Only allowing traffic in from the load balancer security group
+    security_groups = ["${aws_security_group.load_balancer_security_group.id}"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_ecs_task_definition" "api" {
@@ -51,8 +72,9 @@ module "api" {
     "DBUSER" = data.aws_db_instance.database.master_username
     "DBHOST" = data.aws_db_instance.database.address
     "DBPORT" = data.aws_db_instance.database.port
+    "DBPASS" = "itisnotthepassword"
   }
-  map_secrets = {
-    DBPASS = data.aws_ssm_parameter.database_password.arn
-  }
+  # map_secrets = {
+  #   DBPASS = data.aws_ssm_parameter.database_password.arn
+  # }
 }

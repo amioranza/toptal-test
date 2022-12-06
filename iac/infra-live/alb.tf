@@ -39,9 +39,9 @@ resource "aws_security_group" "load_balancer_security_group" {
   }
 }
 
-resource "aws_lb_target_group" "target_group" {
-  name        = "target-group"
-  port        = 80
+resource "aws_lb_target_group" "target_group_web" {
+  name        = "target-group-web-${local.env}"
+  port        = 3000
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = data.aws_vpc.application_vpc.id
@@ -51,12 +51,41 @@ resource "aws_lb_target_group" "target_group" {
   }
 }
 
+resource "aws_lb_target_group" "target_group_api" {
+  name        = "target-group-api-${local.env}"
+  port        = 3000
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = data.aws_vpc.application_vpc.id
+  health_check {
+    matcher = "200"
+    path    = "/api/status"
+  }
+}
+
 resource "aws_lb_listener" "listener" {
   load_balancer_arn = aws_alb.application_load_balancer.arn
   port              = "80"
   protocol          = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.target_group.arn
+    target_group_arn = aws_lb_target_group.target_group_web.arn
   }
+}
+
+resource "aws_lb_listener_rule" "api" {
+  listener_arn = aws_lb_listener.front_end.arn
+  priority     = 100
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.target_group_api.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/api/*"]
+    }
+  }
+
 }
