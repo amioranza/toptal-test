@@ -1,9 +1,8 @@
 resource "aws_alb" "application_load_balancer" {
-  name               = "test-lb-tf" # Naming our load balancer
+  name               = "tt-alb-${local.env}"
   load_balancer_type = "application"
   subnets            = data.aws_subnets.private.ids
-  # Referencing the security group
-  security_groups = ["${aws_security_group.load_balancer_security_group.id}"]
+  security_groups    = ["${aws_security_group.load_balancer_security_group.id}"]
 
   # access_logs {
   #   bucket  = aws_s3_bucket.alb_logs.bucket

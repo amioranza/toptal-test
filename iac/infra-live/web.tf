@@ -20,6 +20,7 @@ resource "aws_ecs_service" "web" {
 }
 
 resource "aws_security_group" "web_security_group" {
+  vpc_id = data.aws_vpc.application_vpc.id
   ingress {
     from_port = 0
     to_port   = 0
