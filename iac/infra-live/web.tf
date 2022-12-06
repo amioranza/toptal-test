@@ -71,7 +71,7 @@ module "web" {
   }
   map_environment = {
     "PORT"     = "3000"
-    "API_HOST" = "http://localhost"
+    "API_HOST" = aws_alb.application_load_balancer.dns_name
   }
 }
 

@@ -73,9 +73,8 @@ module "api" {
     "DBUSER" = data.aws_db_instance.database.master_username
     "DBHOST" = data.aws_db_instance.database.address
     "DBPORT" = data.aws_db_instance.database.port
-    "DBPASS" = "itisnotthepassword"
   }
-  # map_secrets = {
-  #   DBPASS = data.aws_ssm_parameter.database_password.arn
-  # }
+  map_secrets = {
+    "DBPASS" = data.aws_ssm_parameter.database_password.arn
+  }
 }
