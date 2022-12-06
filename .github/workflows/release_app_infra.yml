@@ -25,6 +25,8 @@ jobs:
       - name: api image tag
         id: api-image-tag
         run: |
+          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
+          echo "Tag name from github.ref_name: ${{  github.ref_name }}"
           echo 'API_IMAGE_TAG<<EOF' >> $GITHUB_ENV
           aws ssm get-parameter --name "/application/api/development/docker_tag" --with-decryption | jq -r .Parameter.Value >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
