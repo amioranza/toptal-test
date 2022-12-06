@@ -7,7 +7,7 @@ resource "aws_alb" "application_load_balancer" {
 
   access_logs {
     bucket  = aws_s3_bucket.default.bucket
-    prefix  = "test-lb"
+    prefix  = "tt-alb-${local.env}"
     enabled = true
   }
 }
