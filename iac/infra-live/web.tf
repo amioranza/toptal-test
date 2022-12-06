@@ -69,8 +69,9 @@ module "web" {
     }
   }
   map_environment = {
-    "PORT"     = "3000"
-    "API_HOST" = "http://${aws_alb.application_load_balancer.dns_name}"
+    "PORT"        = "3000"
+    "API_HOST"    = "http://${aws_alb.application_load_balancer.dns_name}"
+    "ECS_FARGATE" = true
   }
 }
 
