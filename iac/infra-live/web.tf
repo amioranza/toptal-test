@@ -60,15 +60,15 @@ module "web" {
     hostPort      = 3000
     protocol      = "TCP"
   }]
-  log_configuration = {
-    logDriver = "awslogs"
-    options = {
-      "awslogs-group"         = aws_cloudwatch_log_group.logs["web"].name
-      "awslogs-region"        = local.env
-      "awslogs-create-group"  = "true",
-      "awslogs-stream-prefix" = "web"
-    }
-  }
+  # log_configuration = {
+  #   logDriver = "awslogs"
+  #   options = {
+  #     "awslogs-group"         = aws_cloudwatch_log_group.logs["web"].name
+  #     "awslogs-region"        = local.env
+  #     "awslogs-create-group"  = "true",
+  #     "awslogs-stream-prefix" = "web"
+  #   }
+  # }
   map_environment = {
     "PORT"     = "3000"
     "API_HOST" = aws_alb.application_load_balancer.dns_name

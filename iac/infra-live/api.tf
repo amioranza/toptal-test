@@ -58,15 +58,15 @@ module "api" {
     hostPort      = 3000
     protocol      = "TCP"
   }]
-  log_configuration = {
-    logDriver = "awslogs"
-    options = {
-      "awslogs-group"         = aws_cloudwatch_log_group.logs["api"].name
-      "awslogs-region"        = local.env
-      "awslogs-create-group"  = "true",
-      "awslogs-stream-prefix" = "api"
-    }
-  }
+  # log_configuration = {
+  #   logDriver = "awslogs"
+  #   options = {
+  #     "awslogs-group"         = aws_cloudwatch_log_group.logs["api"].name
+  #     "awslogs-region"        = local.env
+  #     "awslogs-create-group"  = "true",
+  #     "awslogs-stream-prefix" = "api"
+  #   }
+  # }
   map_environment = {
     "PORT"   = "3000"
     "DB"     = data.aws_db_instance.database.db_name
