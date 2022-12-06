@@ -3,7 +3,7 @@ resource "aws_alb" "application_load_balancer" {
   load_balancer_type = "application"
   subnets            = data.aws_subnets.public.ids
   security_groups    = ["${aws_security_group.load_balancer_security_group.id}"]
-  internal           = true
+  internal           = false
 
   # access_logs {
   #   bucket  = aws_s3_bucket.alb_logs.bucket
