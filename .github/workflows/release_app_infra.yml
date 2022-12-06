@@ -22,11 +22,16 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: set new image tag
+        run: |
+          echo 'RELEASE_TAG<<EOF' >> $GITHUB_ENV
+          git describe --tags --abbrev=0 >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+          echo "New release tag: $RELEASE_TAG"
+
       - name: api image tag
         id: api-image-tag
         run: |
-          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
-          echo "Tag name from github.ref_name: ${{  github.ref_name }}"
           echo 'API_IMAGE_TAG<<EOF' >> $GITHUB_ENV
           aws ssm get-parameter --name "/application/api/development/docker_tag" --with-decryption | jq -r .Parameter.Value >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
@@ -38,9 +43,9 @@ jobs:
           REPOSITORY: api
         run: |
           docker pull $REGISTRY/$REPOSITORY:$API_IMAGE_TAG
-          docker tag $REGISTRY/$REPOSITORY:$API_IMAGE_TAG $REGISTRY/$REPOSITORY:$GITHUB_REF_NAME
-          docker push $REGISTRY/$REPOSITORY:$GITHUB_REF_NAME
-          aws ssm put-parameter --name "/application/api/production/docker_tag" --type "SecureString" --value $GITHUB_REF_NAME --overwrite
+          docker tag $REGISTRY/$REPOSITORY:$API_IMAGE_TAG $REGISTRY/$REPOSITORY:$RELEASE_TAG
+          docker push $REGISTRY/$REPOSITORY:$RELEASE_TAG
+          aws ssm put-parameter --name "/application/api/production/docker_tag" --type "SecureString" --value $RELEASE_TAG --overwrite
 
       - name: web image tag
         id: web-image-tag
@@ -56,9 +61,9 @@ jobs:
           REPOSITORY: web
         run: |
           docker pull $REGISTRY/$REPOSITORY:$WEB_IMAGE_TAG
-          docker tag $REGISTRY/$REPOSITORY:$WEB_IMAGE_TAG $REGISTRY/$REPOSITORY:$GITHUB_REF_NAME
-          docker push $REGISTRY/$REPOSITORY:$GITHUB_REF_NAME
-          aws ssm put-parameter --name "/application/web/production/docker_tag" --type "SecureString" --value $GITHUB_REF_NAME --overwrite
+          docker tag $REGISTRY/$REPOSITORY:$WEB_IMAGE_TAG $REGISTRY/$REPOSITORY:$RELEASE_TAG
+          docker push $REGISTRY/$REPOSITORY:$RELEASE_TAG
+          aws ssm put-parameter --name "/application/web/production/docker_tag" --type "SecureString" --value $RELEASE_TAG --overwrite
 
   Release_Infra:
     runs-on: ubuntu-latest
