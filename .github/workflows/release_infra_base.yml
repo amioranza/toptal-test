@@ -1,0 +1,61 @@
+name: Release Infra
+
+on:
+  push:
+    branches:
+      - 'releases/**'
+
+defaults:
+  run:
+    working-directory: ./iac/base
+
+jobs:
+  validate_and_plan:
+    runs-on: ubuntu-latest
+    name: Apply Base Infra Changes
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.3.5
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: false
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        env:
+          TF_WORKSPACE: production
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+        env:
+          TF_WORKSPACE: production
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color
+        env:
+          TF_WORKSPACE: production
+        continue-on-error: false
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -auto-approve -input=false -no-color
+        env:
+          TF_WORKSPACE: production
+        continue-on-error: false

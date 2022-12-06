@@ -1,0 +1,111 @@
+name: Release App and Infra
+
+on:
+  workflow_run:
+    workflows: ["Release Infra"]
+    types:
+      - completed
+
+jobs:
+  Release_apps:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./app/
+
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: api image tag
+        id: api-image-tag
+        run: |
+          echo "::set-output name=API_IMAGE_TAG::$(aws ssm get-parameter --name /application/api/development/docker_tag)"
+
+      - name: tag image as release
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: api
+        run: |
+          docker pull $REGISTRY/$REPOSITORY:$API_IMAGE_TAG
+          docker tag $REGISTRY/$REPOSITORY:$API_IMAGE_TAG $REGISTRY/$REPOSITORY:$GITHUB_REF_NAME
+          docker push $REGISTRY/$REPOSITORY:$GITHUB_REF_NAME
+          aws ssm put-parameter --name "/application/api/production/docker_tag" --type "SecureString" --value ${{ env.GITHUB_REF_NAME }} --overwrite
+
+      - name: web image tag
+        id: web-image-tag
+        run: |
+          echo "::set-output name=WEB_IMAGE_TAG::$(aws ssm get-parameter --name /application/web/development/docker_tag)"
+
+      - name: tag image as release
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: web
+        run: |
+          docker pull $REGISTRY/$REPOSITORY:$WEB_IMAGE_TAG
+          docker tag $REGISTRY/$REPOSITORY:$WEB_IMAGE_TAG $REGISTRY/$REPOSITORY:$GITHUB_REF_NAME
+          docker push $REGISTRY/$REPOSITORY:$GITHUB_REF_NAME
+          aws ssm put-parameter --name "/application/web/production/docker_tag" --type "SecureString" --value ${{ env.GITHUB_REF_NAME }} --overwrite
+
+  Release_Infra:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./iac/infra-live
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.3.5
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: false
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        env:
+          TF_WORKSPACE: production
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+        env:
+          TF_WORKSPACE: production
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color
+        env:
+          TF_WORKSPACE: production
+        continue-on-error: false
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -auto-approve -input=false -no-color
+        env:
+          TF_WORKSPACE: production
+        continue-on-error: false
