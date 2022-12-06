@@ -1,46 +1,50 @@
-# resource "aws_ecs_service" "web" {
-#   name            = "web"
-#   cluster         = data.aws_ecs_cluster.ecs-cluster.id
-#   task_definition = aws_ecs_task_definition.web.arn
-#   desired_count   = 1
-#   launch_type     = "FARGATE"
-#   network_configuration {
-#     subnets          = data.aws_subnets.private.ids
-#     assign_public_ip = false
-#   }
-#   force_new_deployment = true
-# }
+resource "aws_ecs_service" "web" {
+  name            = "web"
+  cluster         = data.aws_ecs_cluster.ecs-cluster.id
+  task_definition = aws_ecs_task_definition.web.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
 
-# resource "aws_ecs_task_definition" "web" {
-#   family                   = "web"
-#   requires_compatibilities = ["FARGATE"]
-#   network_mode             = "awsvpc"
-#   cpu                      = 256
-#   memory                   = 512
-#   container_definitions    = module.web.json_map_encoded_list
-#   execution_role_arn       = aws_iam_role.task_execution_role.arn
-#   task_role_arn            = aws_iam_role.task_execution_role.arn
-# }
+  load_balancer {
+    target_group_arn = aws_lb_target_group.target_group.arn
+    container_name   = "web"
+    container_port   = 3000
+  }
 
-module "ecs_alb_service_task" {
-  source                    = "cloudposse/ecs-alb-service-task/aws"
-  version                   = "0.66.4"
-  namespace                 = "tt"
-  stage                     = local.env
-  name                      = "web"
-  container_definition_json = module.web.json_map_encoded_list
-  container_port            = 3000
-  ecs_cluster_arn           = data.aws_ecs_cluster.ecs-cluster.id
-  launch_type               = "FARGATE"
-  vpc_id                    = data.aws_vpc.application_vpc.id
-  subnet_ids                = data.aws_subnets.public.ids
-  network_mode              = "awsvpc"
-  assign_public_ip          = false
-  desired_count             = 1
-  task_memory               = 512
-  task_cpu                  = 256
-  task_role_arn             = aws_iam_role.task_execution_role.arn
-  task_exec_role_arn        = aws_iam_role.task_execution_role.arn
+  network_configuration {
+    security_groups  = ["${aws_security_group.web_security_group.id}"]
+    subnets          = data.aws_subnets.private.ids
+    assign_public_ip = false
+  }
+  force_new_deployment = true
+}
+
+resource "aws_security_group" "web_security_group" {
+  ingress {
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    # Only allowing traffic in from the load balancer security group
+    security_groups = ["${aws_security_group.load_balancer_security_group.id}"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_ecs_task_definition" "web" {
+  family                   = "web"
+  requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
+  cpu                      = 256
+  memory                   = 512
+  container_definitions    = module.web.json_map_encoded_list
+  execution_role_arn       = aws_iam_role.task_execution_role.arn
+  task_role_arn            = aws_iam_role.task_execution_role.arn
 }
 
 module "web" {
@@ -69,3 +73,4 @@ module "web" {
     "API_HOST" = "http://localhost"
   }
 }
+
