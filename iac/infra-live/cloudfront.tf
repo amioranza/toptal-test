@@ -33,7 +33,7 @@ resource "aws_cloudfront_distribution" "web" {
       "GET",
       "HEAD",
     ]
-    cache_policy_id = aws_cloudfront_cache_policy.policy.id
+    cache_policy_id = aws_cloudfront_cache_policy.policy[0].id
     cached_methods = [
       "GET",
       "HEAD",
@@ -82,6 +82,7 @@ resource "aws_cloudfront_distribution" "web" {
 }
 
 resource "aws_cloudfront_cache_policy" "policy" {
+  count       = local.env == "development" ? 1 : 0
   comment     = "Default caching"
   default_ttl = 86400
   max_ttl     = 31536000
