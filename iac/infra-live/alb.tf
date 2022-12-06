@@ -1,7 +1,7 @@
 resource "aws_alb" "application_load_balancer" {
   name               = "tt-alb-${local.env}"
   load_balancer_type = "application"
-  subnets            = data.aws_subnets.private.ids
+  subnets            = data.aws_subnets.public.ids
   security_groups    = ["${aws_security_group.load_balancer_security_group.id}"]
 
   # access_logs {
