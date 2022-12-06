@@ -5,7 +5,7 @@ resource "aws_ecs_service" "api" {
   desired_count   = 1
   launch_type     = "FARGATE"
   load_balancer {
-    target_group_arn = aws_lb_target_group.target_group.arn
+    target_group_arn = aws_lb_target_group.target_group_api.arn
     container_name   = "api"
     container_port   = 3000
   }
