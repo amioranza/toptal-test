@@ -2,7 +2,7 @@ name: Release App and Infra Live
 
 on:
   workflow_run:
-    workflows: ["Release Infra"]
+    workflows: ["Release Base Infra"]
     types:
       - completed
 
