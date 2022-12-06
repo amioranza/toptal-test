@@ -1,20 +1,18 @@
 resource "aws_iam_role_policy" "task_execution_policy" {
-  for_each = toset(local.app_modules)
-  name     = "${each.value}-task-execution-role"
-  role     = aws_iam_role.task_execution_role.name
-  policy   = data.aws_iam_policy_document.ecs_task_execution_policy_document.json
+  name   = "task-execution-role-policy-${local.env}"
+  role   = aws_iam_role.task_execution_role.name
+  policy = data.aws_iam_policy_document.ecs_task_execution_policy_document.json
 }
 
 resource "aws_iam_role_policy" "execution_policy" {
-  for_each = toset(local.app_modules)
-  name     = "${each.value}-execution-role"
-  role     = aws_iam_role.task_execution_role.name
-  policy   = data.aws_iam_policy_document.ecs_task_execution_policy_document.json
+  name   = "execution-role-policy-${local.env}"
+  role   = aws_iam_role.task_execution_role.name
+  policy = data.aws_iam_policy_document.ecs_task_execution_policy_document.json
 }
 
 
 resource "aws_iam_role" "task_execution_role" {
-  name               = "task-${local.env}"
+  name               = "task-role-${local.env}"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
