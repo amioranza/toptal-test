@@ -60,7 +60,8 @@ jobs:
 
   Release_Infra:
     runs-on: ubuntu-latest
-    
+    needs:
+      - Release_apps
     defaults:
       run:
         working-directory: iac/infra-live
