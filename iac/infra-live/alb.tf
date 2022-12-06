@@ -5,22 +5,12 @@ resource "aws_alb" "application_load_balancer" {
   security_groups    = ["${aws_security_group.load_balancer_security_group.id}"]
   internal           = false
 
-  # access_logs {
-  #   bucket  = aws_s3_bucket.alb_logs.bucket
-  #   prefix  = "test-lb"
-  #   enabled = true
-  # }
+  access_logs {
+    bucket  = aws_s3_bucket.default.bucket
+    prefix  = "test-lb"
+    enabled = true
+  }
 }
-
-# S3 bucket only for ALB logs
-# resource "aws_s3_bucket" "alb_logs" {
-#   bucket = "tt-alb-logs-${local.env}"
-# }
-
-# resource "aws_s3_bucket_acl" "alb_logs" {
-#   bucket = aws_s3_bucket.alb_logs.id
-#   acl    = "log-delivery-write"
-# }
 
 # Creating a security group for the load balancer:
 resource "aws_security_group" "load_balancer_security_group" {

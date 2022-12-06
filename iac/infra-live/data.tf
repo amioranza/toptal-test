@@ -1,5 +1,7 @@
 data "aws_caller_identity" "current" {}
 
+data "aws_elb_service_account" "default" {}
+
 data "aws_ecs_cluster" "ecs-cluster" {
   cluster_name = "tt-cluster-${local.env}"
 }
