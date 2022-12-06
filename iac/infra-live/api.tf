@@ -10,6 +10,7 @@ resource "aws_ecs_service" "api" {
     container_port   = 3000
   }
   network_configuration {
+    security_groups  = ["${aws_security_group.api_security_group.id}"]
     subnets          = data.aws_subnets.private.ids
     assign_public_ip = false
   }
