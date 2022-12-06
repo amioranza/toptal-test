@@ -25,7 +25,7 @@ jobs:
       - name: api image tag
         id: api-image-tag
         run: |
-          echo "::set-output name=API_IMAGE_TAG::$(aws ssm get-parameter --name '/application/api/development/docker_tag')"
+          echo "::set-output name=API_IMAGE_TAG::$(aws ssm get-parameter --name '/application/api/development/docker_tag' --with-decryption --no-cli-pager | jq -r .Parameter.Value)"
 
       - name: tag image as release
         env:
@@ -40,7 +40,7 @@ jobs:
       - name: web image tag
         id: web-image-tag
         run: |
-          echo "::set-output name=WEB_IMAGE_TAG::$(aws ssm get-parameter --name '/application/web/development/docker_tag')"
+          echo "::set-output name=WEB_IMAGE_TAG::$(aws ssm get-parameter --name '/application/web/development/docker_tag' --with-decryption --no-cli-pager | jq -r .Parameter.Value)"
 
       - name: tag image as release
         env:

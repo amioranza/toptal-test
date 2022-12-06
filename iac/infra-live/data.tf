@@ -35,7 +35,7 @@ data "aws_subnets" "private" {
     values = [data.aws_vpc.application_vpc.id]
   }
   tags = {
-    Name = "application-vpc-development-private-*"
+    Name = "application-vpc-${local.env}-private-*"
   }
 }
 
@@ -45,7 +45,7 @@ data "aws_subnets" "public" {
     values = [data.aws_vpc.application_vpc.id]
   }
   tags = {
-    Name = "application-vpc-development-public-*"
+    Name = "application-vpc-${local.env}-public-*"
   }
 }
 
