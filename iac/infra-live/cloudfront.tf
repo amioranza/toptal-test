@@ -33,7 +33,7 @@ resource "aws_cloudfront_distribution" "web" {
       "GET",
       "HEAD",
     ]
-    cache_policy_id = aws_cloudfront_cache_policy.policy[0].id
+    cache_policy_id = aws_cloudfront_cache_policy.policy.id
     cached_methods = [
       "GET",
       "HEAD",
@@ -82,12 +82,11 @@ resource "aws_cloudfront_distribution" "web" {
 }
 
 resource "aws_cloudfront_cache_policy" "policy" {
-  count       = local.env == "development" ? 1 : 0
   comment     = "Default caching"
   default_ttl = 86400
   max_ttl     = 31536000
   min_ttl     = 1
-  name        = "CachingOptimized"
+  name        = "CachingOptimized-${local.env}"
 
   parameters_in_cache_key_and_forwarded_to_origin {
     enable_accept_encoding_brotli = true
