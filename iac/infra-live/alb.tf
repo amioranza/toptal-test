@@ -17,9 +17,9 @@ resource "aws_s3_bucket" "alb_logs" {
   bucket = "tt-alb-logs-${local.env}"
 }
 
-resource "aws_s3_bucket_acl" "example" {
+resource "aws_s3_bucket_acl" "alb_logs" {
   bucket = aws_s3_bucket.alb_logs.id
-  acl    = "private"
+  acl    = "log-delivery-write"
 }
 
 # Creating a security group for the load balancer:
