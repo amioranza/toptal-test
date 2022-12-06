@@ -25,8 +25,8 @@ resource "aws_alb" "application_load_balancer" {
 resource "aws_security_group" "load_balancer_security_group" {
   vpc_id = data.aws_vpc.application_vpc.id
   ingress {
-    from_port   = 3000
-    to_port     = 3000
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
