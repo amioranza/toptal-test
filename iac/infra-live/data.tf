@@ -64,3 +64,7 @@ data "aws_ssm_parameter" "database_password" {
 data "aws_db_instance" "database" {
   db_instance_identifier = "tt-${local.env}-app"
 }
+
+data "aws_cloudfront_cache_policy" "no_cache" {
+  name = "Managed-CachingDisabled"
+}

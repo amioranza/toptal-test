@@ -12,7 +12,7 @@ resource "aws_cloudfront_distribution" "web" {
       "GET",
       "HEAD",
     ]
-    cache_policy_id = aws_cloudfront_cache_policy.policy.id
+    cache_policy_id = data.aws_cloudfront_cache_policy.no_cache.id
     cached_methods = [
       "GET",
       "HEAD",
