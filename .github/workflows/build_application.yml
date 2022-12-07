@@ -34,6 +34,13 @@ jobs:
           files: |
             app/api/**
 
+      - name: api test
+        if: steps.api-changed.outputs.any_changed == 'true'
+        working-directory: ./app/api
+        run: |
+          npm install
+          npm test
+
       - name: api build
         if: steps.api-changed.outputs.any_changed == 'true'
         working-directory: ./app
@@ -52,6 +59,13 @@ jobs:
         with:
           files: |
             app/web/**
+
+      - name: web test
+        if: steps.web-changed.outputs.any_changed == 'true'
+        working-directory: ./app/web
+        run: |
+          npm install
+          npm test
 
       - name: web build
         if: steps.web-changed.outputs.any_changed == 'true'
