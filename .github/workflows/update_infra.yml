@@ -3,7 +3,7 @@ name: Update Infra
 # Only trigger, when the build workflow succeeded
 on:
   workflow_run:
-    workflows: ["Build Application"]
+    workflows: ["Build Application","Apply Infra"]
     types:
       - completed
 
