@@ -75,3 +75,13 @@ As a solution, please commit to the Toptal git repo the following:
 ## Solution Architecture
 
 ![Solution architecture](toptal_application.drawio.png "Solution architecture")
+
+## Workflows
+
+### Application update
+
+![update application flow](commit_update_flow.png "Update Application Flow")
+
+### Release version
+
+![Release Version](create_release_flow.png "Release Version Flow")
