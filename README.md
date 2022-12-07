@@ -74,4 +74,4 @@ As a solution, please commit to the Toptal git repo the following:
 
 ## Solution Architecture
 
-![Solution architecture](toptal_application.drawio.png.png "Solution architecture")
+![Solution architecture](toptal_application.drawio.png "Solution architecture")
