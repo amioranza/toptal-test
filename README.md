@@ -1,3 +1,7 @@
+[![Apply Infra](https://github.com/amioranza/toptal-test/actions/workflows/apply_infra.yml/badge.svg)](https://github.com/amioranza/toptal-test/actions/workflows/apply_infra.yml)
+[![Build Application](https://github.com/amioranza/toptal-test/actions/workflows/build_application.yml/badge.svg)](https://github.com/amioranza/toptal-test/actions/workflows/build_application.yml)
+[![Update Infra](https://github.com/amioranza/toptal-test/actions/workflows/update_infra.yml/badge.svg)](https://github.com/amioranza/toptal-test/actions/workflows/update_infra.yml)
+
 **Task:** Continuous Delivery 3 - Tier
 
 Estimated time/effort: 10-20 hours
