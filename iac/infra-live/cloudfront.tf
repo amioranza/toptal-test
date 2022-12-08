@@ -42,7 +42,7 @@ resource "aws_cloudfront_distribution" "web" {
     default_ttl            = 0
     max_ttl                = 0
     min_ttl                = 0
-    path_pattern           = "api/*"
+    path_pattern           = "views/*"
     smooth_streaming       = false
     target_origin_id       = aws_alb.application_load_balancer.dns_name
     trusted_key_groups     = []
