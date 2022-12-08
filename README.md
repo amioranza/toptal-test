@@ -84,8 +84,15 @@ As a solution, please commit to the Toptal git repo the following:
 
 ### Application update
 
+[![Apply Infra](https://github.com/amioranza/toptal-test/actions/workflows/apply_infra.yml/badge.svg)](https://github.com/amioranza/toptal-test/actions/workflows/apply_infra.yml)
+[![Build Application](https://github.com/amioranza/toptal-test/actions/workflows/build_application.yml/badge.svg)](https://github.com/amioranza/toptal-test/actions/workflows/build_application.yml)
+[![Update Infra](https://github.com/amioranza/toptal-test/actions/workflows/update_infra.yml/badge.svg)](https://github.com/amioranza/toptal-test/actions/workflows/update_infra.yml)
+
 ![update application flow](commit_update_flow.png "Update Application Flow")
 
 ### Release version
+
+[![Release Base Infra](https://github.com/amioranza/toptal-test/actions/workflows/release_infra_base.yml/badge.svg)](https://github.com/amioranza/toptal-test/actions/workflows/release_infra_base.yml)
+[![Release App and Infra Live](https://github.com/amioranza/toptal-test/actions/workflows/release_app_infra.yml/badge.svg)](https://github.com/amioranza/toptal-test/actions/workflows/release_app_infra.yml)
 
 ![Release Version](create_release_flow.png "Release Version Flow")
