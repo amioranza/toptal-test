@@ -12,7 +12,7 @@ resource "aws_cloudfront_distribution" "web" {
       "GET",
       "HEAD",
     ]
-    cache_policy_id = data.aws_cloudfront_cache_policy.no_cache.id
+    cache_policy_id = aws_cloudfront_cache_policy.policy.id
     cached_methods = [
       "GET",
       "HEAD",
@@ -33,7 +33,7 @@ resource "aws_cloudfront_distribution" "web" {
       "GET",
       "HEAD",
     ]
-    cache_policy_id = aws_cloudfront_cache_policy.policy.id
+    cache_policy_id = data.aws_cloudfront_cache_policy.no_cache.id
     cached_methods = [
       "GET",
       "HEAD",
@@ -42,7 +42,7 @@ resource "aws_cloudfront_distribution" "web" {
     default_ttl            = 0
     max_ttl                = 0
     min_ttl                = 0
-    path_pattern           = "public/*"
+    path_pattern           = "api/*"
     smooth_streaming       = false
     target_origin_id       = aws_alb.application_load_balancer.dns_name
     trusted_key_groups     = []
