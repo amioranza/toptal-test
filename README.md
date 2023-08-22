@@ -92,3 +92,5 @@ As a solution, please commit to the Toptal git repo the following:
 [![Release App and Infra Live](https://github.com/amioranza/toptal-test/actions/workflows/release_app_infra.yml/badge.svg)](https://github.com/amioranza/toptal-test/actions/workflows/release_app_infra.yml)
 
 ![Release Version](create_release_flow.png "Release Version Flow")
+
+..
