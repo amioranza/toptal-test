@@ -1,0 +1,14 @@
+organization: mimi
+project_name: &project_name infra-core
+namespace: mimi
+env: development
+tags:
+  terraform: true
+  team: devops
+modules:
+  vpc:
+    name: infra-core-development
+    subnets:
+      - subnet-1234567890
+      - subnet-0123456789
+      - subnet-9012345678
