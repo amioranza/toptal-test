@@ -9,6 +9,6 @@ modules:
   vpc:
     name: infra-core-development
     subnets:
-      - subnet-1234567890
-      - subnet-0123456789
-      - subnet-9012345678
+      - subnet-12345678901
+      - subnet-01234567891
+      - subnet-90123456781
