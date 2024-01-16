@@ -27,7 +27,7 @@ jobs:
 
       - name: infra-live folder changed
         id: infra-changed
-        uses: tj-actions/changed-files@v34
+        uses: tj-actions/changed-files@v41
         with:
           files: |
             iac/base/**

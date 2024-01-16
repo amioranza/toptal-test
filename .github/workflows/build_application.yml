@@ -29,7 +29,7 @@ jobs:
 
       - name: api folder changed
         id: api-changed
-        uses: tj-actions/changed-files@v34
+        uses: tj-actions/changed-files@v41
         with:
           files: |
             app/api/**
