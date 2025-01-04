@@ -1,10 +1,9 @@
 module "rds_instance" {
   source                       = "cloudposse/rds/aws"
-  version                      = "0.40.0"
+  version                      = "1.1.12"
   namespace                    = "tt"
   stage                        = local.env
   name                         = "app"
-  ca_cert_identifier           = "rds-ca-2019"
   allowed_cidr_blocks          = [module.vpc.vpc_cidr_block]
   database_name                = "appdb"
   database_user                = "appuser"
